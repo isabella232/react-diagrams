@@ -31,7 +31,6 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 			div({className: 'basic-node', style: {background: this.props.node.color }},
 				div({className:'title'},
 					div({className:'name'},this.props.node.name),
-					div({className: 'fa fa-close', onClick: this.props.node.remove})
 				),
 				div({className:'ports'},
 					div({className: 'in'}, _.map(this.props.node.getInPorts(),(port) => {

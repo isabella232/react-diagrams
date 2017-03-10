@@ -285,22 +285,22 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 						}
 						
 						//its a port element, we want to drag a link
-						else if (model.model instanceof PortModel){
-							var relative = diagramEngine.getRelativeMousePoint(event);
-							var link = new LinkModel();
-							link.setSourcePort(model.model);
-							
-							link.getFirstPoint().updateLocation(relative)
-							link.getLastPoint().updateLocation(relative);
-							
-							diagramModel.clearSelection();
-							link.getLastPoint().setSelected(true);
-							diagramModel.addLink(link);
-							
-							this.setState({
-								action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
-							});
-						}
+						// else if (model.model instanceof PortModel){
+						// 	var relative = diagramEngine.getRelativeMousePoint(event);
+						// 	var link = new LinkModel();
+						// 	link.setSourcePort(model.model);
+						// 	
+						// 	link.getFirstPoint().updateLocation(relative)
+						// 	link.getLastPoint().updateLocation(relative);
+						// 	
+						// 	diagramModel.clearSelection();
+						// 	link.getLastPoint().setSelected(true);
+						// 	diagramModel.addLink(link);
+						// 	
+						// 	this.setState({
+						// 		action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
+						// 	});
+						// }
 						//its some or other element, probably want to move it
 						else{
 							
