@@ -23,10 +23,10 @@ export class DefaultLinkWidget extends React.Component<DefaultLinkProps, Default
 
 	public static defaultProps: DefaultLinkProps = {
 		color: 'black',
-		width: 3,
+		width: 5,
 		link:null,
 		engine: null,
-		smooth: false,
+		smooth: true,
 		diagramEngine: null
 	};
 
