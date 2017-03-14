@@ -29,6 +29,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 		if(this.props.node.text) {
 			return (
 				div({className:'content'},
+					div({className:'contentTitle'},this.props.node.contentTitle),
 					div({className:'text'},this.props.node.text),
 				)
 			)
@@ -37,7 +38,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 	}
 	render() {
 		return (
-			React.DOM.div({className: 'basic-node', style: {background: this.props.node.color }},
+			div({className: 'basic-node', style: {background: this.props.node.color }},
 				div({className:'title'},
 					div({className:'name'},this.props.node.name),
 				),

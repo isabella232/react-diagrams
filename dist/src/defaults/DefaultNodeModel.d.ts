@@ -12,10 +12,11 @@ export declare class DefaultNodeModel extends NodeModel {
     name: string;
     color: string;
     text: string;
+    contentTitle: string;
     ports: {
         [s: string]: DefaultPortModel;
     };
-    constructor(name?: string, text?: string, color?: string);
+    constructor(name?: string, text?: string, contentTitle?: string, color?: string);
     deSerialize(object: any): void;
     serialize(): {
         id: string;
@@ -40,6 +41,7 @@ export declare class DefaultNodeModel extends NodeModel {
     } & {
         name: string;
         text: string;
+        contentTitle: string;
         color: string;
     };
     getInPorts(): DefaultPortModel[];

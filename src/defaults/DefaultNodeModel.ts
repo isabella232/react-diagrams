@@ -23,12 +23,14 @@ export class DefaultNodeModel extends NodeModel{
 	name: string;
 	color: string;
 	text: string;
+	contentTitle: string;
 	ports:  {[s: string]:DefaultPortModel};
 	
-	constructor(name?: string,text?: string,color: string = 'rgb(0,192,255)'){
+	constructor(name?: string,text?: string,contentTitle?: string,color: string = 'rgb(0,192,255)'){
 		super("default");
 		this.name = name;
 		this.text = text;
+		this.contentTitle =contentTitle;
 		this.color = color;
 	}
 	
@@ -36,6 +38,7 @@ export class DefaultNodeModel extends NodeModel{
 		super.deSerialize(object);
 		this.name = object.name;
 		this.text = object.text;
+		this.contentTitle = object.contentTitle;
 		this.color = object.color;
 	}
 	
@@ -43,6 +46,7 @@ export class DefaultNodeModel extends NodeModel{
 		return _.merge(super.serialize(),{
 			name: this.name,
 			text: this.text,
+			contentTitle: this.contentTitle,
 			color: this.color,
 		});
 	}

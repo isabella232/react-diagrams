@@ -1033,12 +1033,12 @@ var DefaultNodeWidget = (function (_super) {
     }
     DefaultNodeWidget.prototype.showTitleContent = function () {
         if (this.props.node.text) {
-            return (div({ className: 'content' }, div({ className: 'text' }, this.props.node.text)));
+            return (div({ className: 'content' }, div({ className: 'contentTitle' }, this.props.node.contentTitle), div({ className: 'text' }, this.props.node.text)));
         }
         return null;
     };
     DefaultNodeWidget.prototype.render = function () {
-        return (React.DOM.div({ className: 'basic-node', style: { background: this.props.node.color } }, div({ className: 'title' }, div({ className: 'name' }, this.props.node.name)), this.showTitleContent(), div({ className: 'ports' }, div({ className: 'in' }, _.map(this.props.node.getInPorts(), function (port) {
+        return (div({ className: 'basic-node', style: { background: this.props.node.color } }, div({ className: 'title' }, div({ className: 'name' }, this.props.node.name)), this.showTitleContent(), div({ className: 'ports' }, div({ className: 'in' }, _.map(this.props.node.getInPorts(), function (port) {
             return React.createElement(DefaultPortLabelWidget_1.DefaultPortLabel, { model: port });
         })), div({ className: 'out' }, _.map(this.props.node.getOutPorts(), function (port) {
             return React.createElement(DefaultPortLabelWidget_1.DefaultPortLabel, { model: port });
@@ -2018,11 +2018,12 @@ exports.DefaultNodeInstanceFactory = DefaultNodeInstanceFactory;
  */
 var DefaultNodeModel = (function (_super) {
     __extends(DefaultNodeModel, _super);
-    function DefaultNodeModel(name, text, color) {
+    function DefaultNodeModel(name, text, contentTitle, color) {
         if (color === void 0) { color = 'rgb(0,192,255)'; }
         var _this = _super.call(this, "default") || this;
         _this.name = name;
         _this.text = text;
+        _this.contentTitle = contentTitle;
         _this.color = color;
         return _this;
     }
@@ -2030,12 +2031,14 @@ var DefaultNodeModel = (function (_super) {
         _super.prototype.deSerialize.call(this, object);
         this.name = object.name;
         this.text = object.text;
+        this.contentTitle = object.contentTitle;
         this.color = object.color;
     };
     DefaultNodeModel.prototype.serialize = function () {
         return _.merge(_super.prototype.serialize.call(this), {
             name: this.name,
             text: this.text,
+            contentTitle: this.contentTitle,
             color: this.color,
         });
     };
