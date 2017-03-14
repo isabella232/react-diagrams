@@ -1941,33 +1941,56 @@ var DiagramWidget = (function (_super) {
             },
             onMouseDown: function (event) {
                 diagramEngine.clearRepaintEntities();
-                var model = _this.getMouseElement(event);
-                //its the canvas
-                if (model === null) {
-                    //is it a multiple selection
-                    if (event.shiftKey) {
-                        var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-                        _this.setState({
-                            action: new SelectingAction(relative.x, relative.y)
-                        });
-                    }
-                    else {
-                        var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-                        diagramModel.clearSelection();
-                        _this.setState({
-                            action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
-                        });
-                    }
-                }
-                else {
-                    if (!event.shiftKey && !model.model.isSelected()) {
-                        diagramModel.clearSelection();
-                    }
-                    model.model.setSelected(true);
-                    _this.setState({
-                        action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
-                    });
-                }
+                // var model = this.getMouseElement(event);
+                // //its the canvas
+                // if(model === null){
+                // 	//is it a multiple selection
+                // 	if (event.shiftKey){
+                // 		var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+                // 		this.setState({
+                // 			action: new SelectingAction(
+                // 				relative.x, relative.y
+                // 			)
+                // 		});
+                // 	}
+                //its a drag the canvas event
+                // else{
+                // 	var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+                // 	diagramModel.clearSelection();
+                // 	this.setState({
+                // 		action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
+                // 	});
+                // }
+                // }
+                //its a port element, we want to drag a link
+                // else if (model.model instanceof PortModel){
+                // 	var relative = diagramEngine.getRelativeMousePoint(event);
+                // 	var link = new LinkModel();
+                // 	link.setSourcePort(model.model);
+                // 	
+                // 	link.getFirstPoint().updateLocation(relative)
+                // 	link.getLastPoint().updateLocation(relative);
+                // 	
+                // 	diagramModel.clearSelection();
+                // 	link.getLastPoint().setSelected(true);
+                // 	diagramModel.addLink(link);
+                // 	
+                // 	this.setState({
+                // 		action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
+                // 	});
+                // }
+                //its some or other element, probably want to move it
+                // else{
+                // 	
+                // 	if (!event.shiftKey && !model.model.isSelected()){
+                // 		diagramModel.clearSelection();
+                // 	}
+                // 	model.model.setSelected(true);
+                // 	
+                // 	this.setState({
+                // 		action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
+                // 	});
+                // }
             },
             onMouseUp: function (event) {
                 //are we going to connect a link to something?

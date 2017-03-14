@@ -261,28 +261,28 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 					onMouseDown: (event) =>{
 						diagramEngine.clearRepaintEntities();
 						
-						var model = this.getMouseElement(event);
-						//its the canvas
-						if(model === null){
-							//is it a multiple selection
-							if (event.shiftKey){
-								var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-								this.setState({
-									action: new SelectingAction(
-										relative.x, relative.y
-									)
-								});
-							}
+						// var model = this.getMouseElement(event);
+						// //its the canvas
+						// if(model === null){
+						// 	//is it a multiple selection
+						// 	if (event.shiftKey){
+						// 		var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+						// 		this.setState({
+						// 			action: new SelectingAction(
+						// 				relative.x, relative.y
+						// 			)
+						// 		});
+						// 	}
 							
 							//its a drag the canvas event
-							else{
-								var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-								diagramModel.clearSelection();
-								this.setState({
-									action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
-								});
-							}
-						}
+							// else{
+							// 	var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+							// 	diagramModel.clearSelection();
+							// 	this.setState({
+							// 		action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
+							// 	});
+							// }
+						// }
 						
 						//its a port element, we want to drag a link
 						// else if (model.model instanceof PortModel){
@@ -302,17 +302,17 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 						// 	});
 						// }
 						//its some or other element, probably want to move it
-						else{
-							
-							if (!event.shiftKey && !model.model.isSelected()){
-								diagramModel.clearSelection();
-							}
-							model.model.setSelected(true);
-							
-							this.setState({
-								action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
-							});
-						}
+						// else{
+						// 	
+						// 	if (!event.shiftKey && !model.model.isSelected()){
+						// 		diagramModel.clearSelection();
+						// 	}
+						// 	model.model.setSelected(true);
+						// 	
+						// 	this.setState({
+						// 		action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
+						// 	});
+						// }
 					},
 					onMouseUp: (event) => {
 						
