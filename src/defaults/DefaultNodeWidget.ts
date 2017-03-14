@@ -25,13 +25,23 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 		this.state = {
 		}
 	}
-	
+	showTitleContent() {
+		if(this.props.node.text) {
+			return (
+				div({className:'content'},
+					div({className:'text'},this.props.node.text),
+				)
+			)
+		}
+		return null;
+	}
 	render() {
 		return (
-			div({className: 'basic-node', style: {background: this.props.node.color }},
+			React.DOM.div({className: 'basic-node', style: {background: this.props.node.color }},
 				div({className:'title'},
 					div({className:'name'},this.props.node.name),
 				),
+				this.showTitleContent(),
 				div({className:'ports'},
 					div({className: 'in'}, _.map(this.props.node.getInPorts(),(port) => {
 						return React.createElement(DefaultPortLabel,{model: port});

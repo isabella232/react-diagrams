@@ -12,5 +12,6 @@ export interface DefaultNodeState {
 export declare class DefaultNodeWidget extends React.Component<DefaultNodeProps, DefaultNodeState> {
     static defaultProps: DefaultNodeProps;
     constructor(props: DefaultNodeProps);
+    showTitleContent(): React.DOMElement<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
     render(): React.DOMElement<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 }
