@@ -264,55 +264,69 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 						var model = this.getMouseElement(event);
 						//its the canvas
 						if(model === null){
-							//is it a multiple selection
-							// if (event.shiftKey){
-							// 	var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-							// 	this.setState({
-							// 		action: new SelectingAction(
-							// 			relative.x, relative.y
-							// 		)
-							// 	});
-							// }
+							// is it a multiple selection
+							if (event.shiftKey){
+								var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+								this.setState({
+									action: new SelectingAction(
+										relative.x, relative.y
+									)
+								});
+							}
 							
 							// its a drag the canvas event
-							// else{
+							else{
 								var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
 								diagramModel.clearSelection();
 								this.setState({
 									action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
 								});
-							// }
+							}
 						}
 						
 						//its a port element, we want to drag a link
-						// else if (model.model instanceof PortModel){
-						// 	var relative = diagramEngine.getRelativeMousePoint(event);
-						// 	var link = new LinkModel();
-						// 	link.setSourcePort(model.model);
-						// 	
-						// 	link.getFirstPoint().updateLocation(relative)
-						// 	link.getLastPoint().updateLocation(relative);
-						// 	
-						// 	diagramModel.clearSelection();
-						// 	link.getLastPoint().setSelected(true);
-						// 	diagramModel.addLink(link);
-						// 	
-						// 	this.setState({
-						// 		action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
-						// 	});
-						// }
+						else if (model.model instanceof PortModel){
+							if(model.model.drag){
+								var relative = diagramEngine.getRelativeMousePoint(event);
+								var link = new LinkModel();
+								link.setSourcePort(model.model);
+								
+								link.getFirstPoint().updateLocation(relative)
+								link.getLastPoint().updateLocation(relative);
+								
+								diagramModel.clearSelection();
+								link.getLastPoint().setSelected(true);
+								diagramModel.addLink(link);
+								
+								this.setState({
+									action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
+								});
+							}
+						}
+						else if(model.model instanceof NodeModel){
+							if(model.model.drag) {
+								if (!event.shiftKey && !model.model.isSelected()){
+									diagramModel.clearSelection();
+								}
+								model.model.setSelected(true);
+								
+								this.setState({
+									action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
+								});
+							}
+						}
 						//its some or other element, probably want to move it
-						// else{
-						// 	
-						// 	if (!event.shiftKey && !model.model.isSelected()){
-						// 		diagramModel.clearSelection();
-						// 	}
-						// 	model.model.setSelected(true);
-						// 	
-						// 	this.setState({
-						// 		action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
-						// 	});
-						// }
+						else{
+							
+							if (!event.shiftKey && !model.model.isSelected()){
+								diagramModel.clearSelection();
+							}
+							model.model.setSelected(true);
+							
+							this.setState({
+								action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
+							});
+						}
 					},
 					onMouseUp: (event) => {
 						

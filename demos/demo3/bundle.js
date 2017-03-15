@@ -297,11 +297,13 @@ var LinkModel = (function (_super) {
 exports.LinkModel = LinkModel;
 var PortModel = (function (_super) {
     __extends(PortModel, _super);
-    function PortModel(name) {
+    function PortModel(name, drag) {
+        if (drag === void 0) { drag = true; }
         var _this = _super.call(this) || this;
         _this.name = name;
         _this.links = {};
         _this.parentNode = null;
+        _this.drag = drag;
         return _this;
     }
     PortModel.prototype.deSerialize = function (ob) {
@@ -340,14 +342,16 @@ var PortModel = (function (_super) {
 exports.PortModel = PortModel;
 var NodeModel = (function (_super) {
     __extends(NodeModel, _super);
-    function NodeModel(nodeType) {
+    function NodeModel(nodeType, drag) {
         if (nodeType === void 0) { nodeType = 'default'; }
+        if (drag === void 0) { drag = true; }
         var _this = _super.call(this) || this;
         _this.nodeType = nodeType;
         _this.x = 0;
         _this.y = 0;
         _this.extras = {};
         _this.ports = {};
+        _this.drag = drag;
         return _this;
     }
     NodeModel.prototype.deSerialize = function (ob) {
@@ -356,6 +360,7 @@ var NodeModel = (function (_super) {
         this.x = ob.x;
         this.y = ob.y;
         this.extras = ob.extras;
+        this.drag = ob.drag;
     };
     NodeModel.prototype.serialize = function () {
         return _.merge(_super.prototype.serialize.call(this), {
@@ -365,7 +370,8 @@ var NodeModel = (function (_super) {
             extras: this.extras,
             ports: _.map(this.ports, function (port) {
                 return port.serialize();
-            })
+            }),
+            drag: this.drag
         });
     };
     NodeModel.prototype.remove = function () {
@@ -2018,13 +2024,15 @@ exports.DefaultNodeInstanceFactory = DefaultNodeInstanceFactory;
  */
 var DefaultNodeModel = (function (_super) {
     __extends(DefaultNodeModel, _super);
-    function DefaultNodeModel(name, text, contentTitle, color) {
+    function DefaultNodeModel(name, text, contentTitle, color, drag) {
         if (color === void 0) { color = 'rgb(0,192,255)'; }
+        if (drag === void 0) { drag = true; }
         var _this = _super.call(this, "default") || this;
         _this.name = name;
         _this.text = text;
         _this.contentTitle = contentTitle;
         _this.color = color;
+        _this.drag = drag;
         return _this;
     }
     DefaultNodeModel.prototype.deSerialize = function (object) {
@@ -2033,6 +2041,7 @@ var DefaultNodeModel = (function (_super) {
         this.text = object.text;
         this.contentTitle = object.contentTitle;
         this.color = object.color;
+        this.drag = object.drag;
     };
     DefaultNodeModel.prototype.serialize = function () {
         return _.merge(_super.prototype.serialize.call(this), {
@@ -2040,6 +2049,7 @@ var DefaultNodeModel = (function (_super) {
             text: this.text,
             contentTitle: this.contentTitle,
             color: this.color,
+            drag: this.drag,
         });
     };
     DefaultNodeModel.prototype.getInPorts = function () {
@@ -2093,17 +2103,20 @@ exports.DefaultPortInstanceFactory = DefaultPortInstanceFactory;
  */
 var DefaultPortModel = (function (_super) {
     __extends(DefaultPortModel, _super);
-    function DefaultPortModel(isInput, name, label) {
+    function DefaultPortModel(isInput, name, label, drag) {
         if (label === void 0) { label = null; }
+        if (drag === void 0) { drag = true; }
         var _this = _super.call(this, name) || this;
         _this.in = isInput;
         _this.label = label || name;
+        _this.drag = drag;
         return _this;
     }
     DefaultPortModel.prototype.deSerialize = function (object) {
         _super.prototype.deSerialize.call(this, object);
         this.in = object.in;
         this.label = object.label;
+        this.drag = object.drag;
     };
     DefaultPortModel.prototype.serialize = function () {
         return _.merge(_super.prototype.serialize.call(this), {
@@ -2346,53 +2359,56 @@ var DiagramWidget = (function (_super) {
                 var model = _this.getMouseElement(event);
                 //its the canvas
                 if (model === null) {
-                    //is it a multiple selection
-                    // if (event.shiftKey){
-                    // 	var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-                    // 	this.setState({
-                    // 		action: new SelectingAction(
-                    // 			relative.x, relative.y
-                    // 		)
-                    // 	});
-                    // }
-                    // its a drag the canvas event
-                    // else{
-                    var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
-                    diagramModel.clearSelection();
-                    _this.setState({
-                        action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
-                    });
-                    // }
+                    // is it a multiple selection
+                    if (event.shiftKey) {
+                        var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+                        _this.setState({
+                            action: new SelectingAction(relative.x, relative.y)
+                        });
+                    }
+                    else {
+                        var relative = diagramEngine.getRelativePoint(event.pageX, event.pageY);
+                        diagramModel.clearSelection();
+                        _this.setState({
+                            action: new MoveCanvasAction(relative.x, relative.y, diagramModel)
+                        });
+                    }
                 }
-                //its a port element, we want to drag a link
-                // else if (model.model instanceof PortModel){
-                // 	var relative = diagramEngine.getRelativeMousePoint(event);
-                // 	var link = new LinkModel();
-                // 	link.setSourcePort(model.model);
-                // 	
-                // 	link.getFirstPoint().updateLocation(relative)
-                // 	link.getLastPoint().updateLocation(relative);
-                // 	
-                // 	diagramModel.clearSelection();
-                // 	link.getLastPoint().setSelected(true);
-                // 	diagramModel.addLink(link);
-                // 	
-                // 	this.setState({
-                // 		action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
-                // 	});
-                // }
-                //its some or other element, probably want to move it
-                // else{
-                // 	
-                // 	if (!event.shiftKey && !model.model.isSelected()){
-                // 		diagramModel.clearSelection();
-                // 	}
-                // 	model.model.setSelected(true);
-                // 	
-                // 	this.setState({
-                // 		action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
-                // 	});
-                // }
+                else if (model.model instanceof Common_1.PortModel) {
+                    if (model.model.drag) {
+                        var relative = diagramEngine.getRelativeMousePoint(event);
+                        var link = new Common_1.LinkModel();
+                        link.setSourcePort(model.model);
+                        link.getFirstPoint().updateLocation(relative);
+                        link.getLastPoint().updateLocation(relative);
+                        diagramModel.clearSelection();
+                        link.getLastPoint().setSelected(true);
+                        diagramModel.addLink(link);
+                        _this.setState({
+                            action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
+                        });
+                    }
+                }
+                else if (model.model instanceof Common_1.NodeModel) {
+                    if (model.model.drag) {
+                        if (!event.shiftKey && !model.model.isSelected()) {
+                            diagramModel.clearSelection();
+                        }
+                        model.model.setSelected(true);
+                        _this.setState({
+                            action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
+                        });
+                    }
+                }
+                else {
+                    if (!event.shiftKey && !model.model.isSelected()) {
+                        diagramModel.clearSelection();
+                    }
+                    model.model.setSelected(true);
+                    _this.setState({
+                        action: new MoveItemsAction(event.pageX, event.pageY, diagramEngine)
+                    });
+                }
             },
             onMouseUp: function (event) {
                 //are we going to connect a link to something?

@@ -30,14 +30,14 @@ window.onload = () => {
 	var model = new SRD.DiagramModel();
 	
 	//3-A) create a default node
-	var node1 = new SRD.DefaultNodeModel("Node 1","rgb(0,192,255)");
-	var port1 = node1.addPort(new SRD.DefaultPortModel(false,"out-1","Out"));
+	var node1 = new SRD.DefaultNodeModel("1","2","3","rgb(0,192,255)",false);
+	var port1 = node1.addPort(new SRD.DefaultPortModel(false,"out-1","Out",false));
 	node1.x = 100;
 	node1.y = 100;
 	
 	//3-B) create another default node
-	var node2 = new SRD.DefaultNodeModel("Node 2","rgb(192,255,0)");
-	var port2 = node2.addPort(new SRD.DefaultPortModel(true,"in-1","IN"));
+	var node2 = new SRD.DefaultNodeModel("1","2","3","rgb(192,255,0)",false);
+	var port2 = node2.addPort(new SRD.DefaultPortModel(true,"in-1","IN",false));
 	node2.x = 400;
 	node2.y = 100;
 	

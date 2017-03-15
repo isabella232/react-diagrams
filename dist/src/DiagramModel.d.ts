@@ -74,6 +74,7 @@ export declare class DiagramModel extends BaseEntity<DiagramListener> {
                 parentNode: string;
                 links: string[];
             })[];
+            drag: boolean;
         })[];
     };
     clearSelection(ignore?: BaseModel | null): void;

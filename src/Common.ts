@@ -236,6 +236,7 @@ export class PortModel extends BaseModel{
 	name: string;
 	parentNode: NodeModel;
 	links: {[id: string]: LinkModel};
+	drag: boolean;
 	
 	deSerialize(ob){
 		super.deSerialize(ob);
@@ -252,11 +253,12 @@ export class PortModel extends BaseModel{
 		});
 	}
 	
-	constructor(name: string){
+	constructor(name: string, drag: boolean=true){
 		super();
 		this.name = name;
 		this.links = {};
 		this.parentNode = null;
+		this.drag = drag;
 	}
 	
 	getName(): string{
@@ -291,14 +293,16 @@ export class NodeModel extends BaseModel{
 	y: number;
 	extras: {};
 	ports:  {[s: string]:PortModel};
+	drag: boolean;
 	
-	constructor(nodeType: string = 'default'){
+	constructor(nodeType: string = 'default', drag: boolean = true){
 		super();
 		this.nodeType = nodeType;
 		this.x = 0;
 		this.y = 0;
 		this.extras = {};
 		this.ports = {};
+		this.drag = drag;
 	}
 	
 	deSerialize(ob){
@@ -307,6 +311,7 @@ export class NodeModel extends BaseModel{
 		this.x = ob.x;
 		this.y = ob.y;
 		this.extras = ob.extras;
+		this.drag = ob.drag;
 	}
 	
 	serialize(){
@@ -317,7 +322,8 @@ export class NodeModel extends BaseModel{
 			extras: this.extras,
 			ports: _.map(this.ports,(port) => {
 				return port.serialize()
-			})
+			}),
+			drag: this.drag
 		});
 	}
 	

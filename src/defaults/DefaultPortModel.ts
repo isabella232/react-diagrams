@@ -19,17 +19,20 @@ export class DefaultPortInstanceFactory extends AbstractInstanceFactory<DefaultP
 export class DefaultPortModel extends PortModel{
 	in: boolean;
 	label: string;
+	drag: boolean;
 	
-	constructor(isInput:boolean,name: string,label: string = null){
+	constructor(isInput:boolean,name: string,label: string = null,drag: boolean = true){
 		super(name);
 		this.in = isInput;
 		this.label = label || name;
+		this.drag = drag;
 	}
 	
 	deSerialize(object){
 		super.deSerialize(object);
 		this.in = object.in;
 		this.label = object.label;
+		this.drag = object.drag;
 	}
 	
 	serialize(){

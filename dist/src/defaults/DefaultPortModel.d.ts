@@ -10,7 +10,8 @@ export declare class DefaultPortInstanceFactory extends AbstractInstanceFactory<
 export declare class DefaultPortModel extends PortModel {
     in: boolean;
     label: string;
-    constructor(isInput: boolean, name: string, label?: string);
+    drag: boolean;
+    constructor(isInput: boolean, name: string, label?: string, drag?: boolean);
     deSerialize(object: any): void;
     serialize(): {
         id: string;

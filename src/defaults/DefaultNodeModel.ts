@@ -25,13 +25,15 @@ export class DefaultNodeModel extends NodeModel{
 	text: string;
 	contentTitle: string;
 	ports:  {[s: string]:DefaultPortModel};
+	drag: boolean;
 	
-	constructor(name?: string,text?: string,contentTitle?: string,color: string = 'rgb(0,192,255)'){
+	constructor(name?: string,text?: string,contentTitle?: string,color: string = 'rgb(0,192,255)',drag: boolean=true){
 		super("default");
 		this.name = name;
 		this.text = text;
 		this.contentTitle =contentTitle;
 		this.color = color;
+		this.drag = drag;
 	}
 	
 	deSerialize(object){
@@ -40,6 +42,7 @@ export class DefaultNodeModel extends NodeModel{
 		this.text = object.text;
 		this.contentTitle = object.contentTitle;
 		this.color = object.color;
+		this.drag = object.drag;
 	}
 	
 	serialize(){
@@ -48,6 +51,7 @@ export class DefaultNodeModel extends NodeModel{
 			text: this.text,
 			contentTitle: this.contentTitle,
 			color: this.color,
+			drag: this.drag,
 		});
 	}
 	

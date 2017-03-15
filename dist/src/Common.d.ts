@@ -100,6 +100,7 @@ export declare class PortModel extends BaseModel {
     links: {
         [id: string]: LinkModel;
     };
+    drag: boolean;
     deSerialize(ob: any): void;
     serialize(): {
         id: string;
@@ -111,7 +112,7 @@ export declare class PortModel extends BaseModel {
         parentNode: string;
         links: string[];
     };
-    constructor(name: string);
+    constructor(name: string, drag?: boolean);
     getName(): string;
     getParent(): NodeModel;
     setParentNode(node: NodeModel): void;
@@ -129,7 +130,8 @@ export declare class NodeModel extends BaseModel {
     ports: {
         [s: string]: PortModel;
     };
-    constructor(nodeType?: string);
+    drag: boolean;
+    constructor(nodeType?: string, drag?: boolean);
     deSerialize(ob: any): void;
     serialize(): {
         id: string;
@@ -151,6 +153,7 @@ export declare class NodeModel extends BaseModel {
             parentNode: string;
             links: string[];
         })[];
+        drag: boolean;
     };
     remove(): void;
     getPortFromID(id: any): PortModel | null;
