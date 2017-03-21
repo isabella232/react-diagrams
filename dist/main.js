@@ -1959,7 +1959,8 @@ var DiagramWidget = (function (_super) {
                     _this.forceUpdate();
                 }
                 else if (_this.state.action instanceof MoveCanvasAction) {
-                    diagramModel.setOffset(_this.state.action.initialOffsetX + ((event.pageX - _this.state.action.mouseX) / (diagramModel.getZoomLevel() / 100)), _this.state.action.initialOffsetY + ((event.pageY - _this.state.action.mouseY) / (diagramModel.getZoomLevel() / 100)));
+                    console.log("initialOffsetXY", event.pageX, event.pageY);
+                    diagramModel.setOffset(_this.state.action.initialOffsetX + ((event.pageX - _this.state.action.mouseX - 76) / (diagramModel.getZoomLevel() / 100)), _this.state.action.initialOffsetY + ((event.pageY - _this.state.action.mouseY - 64) / (diagramModel.getZoomLevel() / 100)));
                     _this.forceUpdate();
                 }
             },

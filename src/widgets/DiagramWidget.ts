@@ -252,8 +252,8 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 						//translate the actual canvas
 						else if (this.state.action instanceof MoveCanvasAction){
 							diagramModel.setOffset(
-								this.state.action.initialOffsetX + ((event.pageX - this.state.action.mouseX) / (diagramModel.getZoomLevel()/100)),
-								this.state.action.initialOffsetY+((event.pageY-this.state.action.mouseY)/(diagramModel.getZoomLevel()/100))
+								this.state.action.initialOffsetX + ((event.pageX - this.state.action.mouseX -76) / (diagramModel.getZoomLevel()/100)),
+								this.state.action.initialOffsetY+((event.pageY-this.state.action.mouseY - 64)/(diagramModel.getZoomLevel()/100))
 							);
 							this.forceUpdate();
 						}
