@@ -29,20 +29,19 @@ yarn add storm-react-diagrams
 
 * Its only dependency is Lodash and obviously React so it will install that too.
 
+#### How to build
+
+Simply run ```webpack``` in the root directory (or ```webpack -p``` if you want a production build) and it will spit out the transpiled code and typescript definitions into the dist directory as a single file. __It will also compile the code for the demos__ .We use webpack for this because TSC cannot compile a single UMD file (TSC can currently only output multiple UMD files).
+
 #### How to see the examples
 
-simply navigate to the __demos__ directory and load up the corresponding index.html
+1. checkout the project
+2. run ```webpack``` in the root
+3. open up one of the __demos__ folders and load the corresponding index.html file.
 
 To see how to create your own nodes like the one below, take a look at __demo3__:
 
 ![Demo2](./custom-nodes.png)
-
-
-#### How to build
-
-Simply run ```webpack``` in the root directory and it will spit out the transpiled code and typescript definitions
-into the dist directory as a single file. We use webpack for this because TSC cannot compile a single UMD file (TSC can currently
-only output multiple UMD files).
 
 
 ## How does it work
@@ -57,6 +56,42 @@ Therefore, to create custom nodes and links, register your own factories that re
 
 As long as a node contains at least one port and the corresponding NodeWidget contains at least one PortWidget,
 a link can be connected to it.
+
+## Events
+
+Each model (DiagramModel, NodeModel etc..) are all built ontop of an event system. You can listen for most of these events by registering
+an event on the model itself. See below for some common events (I will add better documentation soon)
+
+ - entityRemoved (entity)
+ - selectionChanged (entity, isSelected:Boolean)
+ - nodeFactoriesUpdated
+ - linkFactoriesUpdated
+ - controlsUpdated
+ - linksUpdated (entity, isAdded:Boolean)
+ - nodesUpdated (entity, isAdded:Boolean)
+
+ ### Example of usage
+ ```javascript
+let model = new SRD.DiagramModel();
+let node1 = new SRD.DefaultNodeModel("default","rgb(0,192,255)");
+node1.addListener({
+      entityRemoved: (node) => {
+        console.log('Removed', node.id)
+      },
+      selectionChanged: (node, isSelected) => {
+        console.log(isSelected?'Selected':'Unselected', node)
+      }
+    });
+model.addListener({
+      linksUpdated:(entity, isAdded) => {
+        console.log(isAdded?'added':'removed', entity)
+      },
+      nodesUpdated: (entity, isAdded) => {
+        console.log(isAdded?'added':'removed', entity)
+      }
+    });
+```
+
 
 ## Questions
 
