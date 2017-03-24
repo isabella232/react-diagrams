@@ -2,6 +2,7 @@ var webpack = require("webpack");
 /**
  * @author Dylan Vorster
  */
+var path = require('path')
 module.exports = [
 	//for building the umd distribution
 	{
@@ -11,6 +12,12 @@ module.exports = [
 			path: __dirname + '/dist',
 			libraryTarget: 'umd',
 			library: 'admithub-react-diagrams'
+		},
+		resolve: {
+			alias: {
+				react: path.resolve('./node_modules/react'),
+				'react-dom': path.resolve('./node_modules/react-dom')
+			},
 		},
 		externals: {
 			react: {
