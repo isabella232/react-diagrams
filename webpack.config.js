@@ -1,13 +1,16 @@
+var webpack = require("webpack");
 /**
  * @author Dylan Vorster
  */
-module.exports = {
+module.exports = [
+	//for building the umd distribution
+	{
 		entry: './src/main.ts',
 		output: {
 			filename: 'main.js',
-			path: __dirname +'/dist',
+			path: __dirname + '/dist',
 			libraryTarget: 'umd',
-			library: 'storm-react-diagrams'
+			library: 'admithub-react-diagrams'
 		},
 		externals: {
 			react: {
@@ -29,6 +32,16 @@ module.exports = {
 				root: '_'
 			}
 		},
+		plugins:[
+			new webpack.optimize.UglifyJsPlugin({
+				mangle: {
+					keep_fnames: true
+				},
+				compress: {
+					warnings: false,
+				}
+			})
+		],
 		module: {
 			rules: [
 				{
@@ -47,5 +60,6 @@ module.exports = {
 		resolve: {
 			extensions: [".tsx", ".ts", ".js"]
 		},
-		devtool: 'source-map'
-	};
+//		devtool: 'source-map'
+	}
+];
