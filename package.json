@@ -11,7 +11,7 @@
   "main": "./dist/main.js",
   "typings": "./dist/src/main",
   "author": "robawilkinson",
-  "peerDependencies": {
+  "dependencies": {
     "lodash": "^4.13.1",
     "react-dom": "^15.1.0",
     "react": "^15.1.0",

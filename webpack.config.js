@@ -14,10 +14,7 @@ module.exports = [
 			library: 'admithub-react-diagrams'
 		},
 		resolve: {
-			alias: {
-				react: path.resolve('./node_modules/react'),
-				'react-dom': path.resolve('./node_modules/react-dom')
-			},
+			modules: [path.resolve(__dirname, "..", ".."), "node_modules"]
 		},
 		externals: {
 			react: {
