@@ -1,6 +1,6 @@
 {
 	"compileOnSave": false,
-	"name": "storm-react-diagrams",
+	"name": "admithub-react-diagrams",
 	"compilerOptions": {
 		"suppressExcessPropertyErrors": true,
 		"declaration": true,
