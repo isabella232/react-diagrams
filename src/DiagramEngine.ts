@@ -1,5 +1,5 @@
 import {NodeWidgetFactory, LinkWidgetFactory} from "./WidgetFactories";
-import {LinkModel, NodeModel, BaseModel, PortModel, PointModel} from "./Common";
+import {LinkModel, NodeModel, BaseModel,BaseModelListener, PortModel, PointModel} from "./Common";
 import {BaseEntity, BaseListener} from "./BaseEntity";
 import {DiagramModel} from "./DiagramModel";
 import {AbstractInstanceFactory} from "./AbstractInstanceFactory";
@@ -9,9 +9,11 @@ import * as _ from "lodash";
  */
 export interface DiagramEngineListener extends BaseListener{
 	
-	nodeFactoriesUpdated(): any;
+	nodeFactoriesUpdated?(): void;
 	
-	linkFactoriesUpdated(): any;
+	linkFactoriesUpdated?(): void;
+	
+	repaintCanvas?(): void;
 }
 
 /**
@@ -37,11 +39,17 @@ export class DiagramEngine extends BaseEntity<DiagramEngineListener>{
 		this.paintableWidgets = null;
 	}
 	
+	repaintCanvas(){
+		this.iterateListeners((listener) => {
+			listener.repaintCanvas && listener.repaintCanvas();
+		})
+	}
+	
 	clearRepaintEntities(){
 		this.paintableWidgets = null;
 	}
 	
-	enableRepaintEntities(entities: BaseModel[]){
+	enableRepaintEntities(entities: BaseModel<BaseModelListener>[]){
 		this.paintableWidgets = {};
 		entities.forEach((entity) => {
 			
@@ -62,7 +70,28 @@ export class DiagramEngine extends BaseEntity<DiagramEngineListener>{
 		});
 	}
 	
-	canEntityRepaint(baseModel: BaseModel){
+	/**
+	 * Checks to see if a model is locked by running through
+	 * its parents to see if they are locked first
+	 */
+	isModelLocked(model: BaseEntity<BaseListener>){
+		
+		//always check the diagram model
+		if (this.diagramModel.isLocked()){
+			return true;
+		}
+		
+		//a point is locked, if its model is locked
+		if (model instanceof PointModel){
+			if (model.getLink().isLocked()){
+				return true;
+			}
+		}
+		
+		return model.isLocked();
+	}
+	
+	canEntityRepaint(baseModel: BaseModel<BaseModelListener>){
 		//no rules applied, allow repaint
 		if(this.paintableWidgets === null){
 			return true;
@@ -101,15 +130,15 @@ export class DiagramEngine extends BaseEntity<DiagramEngineListener>{
 	
 	registerNodeFactory(factory: NodeWidgetFactory){
 		this.nodeFactories[factory.getType()] = factory;
-		this.itterateListeners((listener) => {
-			listener.nodeFactoriesUpdated();
+		this.iterateListeners((listener) => {
+			if(listener.nodeFactoriesUpdated) listener.nodeFactoriesUpdated();
 		});
 	}
 	
 	registerLinkFactory(factory: LinkWidgetFactory){
 		this.linkFactories[factory.getType()] = factory;
-		this.itterateListeners((listener) => {
-			listener.linkFactoriesUpdated();
+		this.iterateListeners((listener) => {
+			if(listener.linkFactoriesUpdated) listener.linkFactoriesUpdated();
 		});
 	}
 	

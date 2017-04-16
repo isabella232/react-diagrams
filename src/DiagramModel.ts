@@ -1,4 +1,4 @@
-import {LinkModel, NodeModel, BaseModel, PortModel} from "./Common";
+import {LinkModel, NodeModel, BaseModel,BaseModelListener, PortModel} from "./Common";
 import {BaseListener, BaseEntity} from "./BaseEntity";
 import * as _ from "lodash";
 import {DiagramEngine} from "./DiagramEngine";
@@ -8,11 +8,18 @@ import {DiagramEngine} from "./DiagramEngine";
  */
 export interface DiagramListener extends BaseListener{
 	
-	nodesUpdated(node: any, isCreated:boolean): any;
+	nodesUpdated?(node: any, isCreated:boolean): void;
 	
-	linksUpdated(link: any, isCreated:boolean): any;
+	linksUpdated?(link: any, isCreated:boolean): void;
 	
-	controlsUpdated(): any;
+	/**
+	 * @deprecated
+	 */
+	controlsUpdated?(): void;
+	
+	offsetUpdated?(model: DiagramModel,offsetX: number, offsetY: number): void;
+	
+	zoomUpdated?(model: DiagramModel,zoom: number): void;
 }
 /**
  * 
@@ -48,11 +55,11 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 		this.offsetY = object.offsetY;
 		this.zoom = object.zoom;
 		
+		
 		//deserialize nodes
 		_.forEach(object.nodes,(node) => {
-			let nodeOb = diagramEngine.getInstanceFactory(node._class).getInstance() as NodeModel;
+			let nodeOb = diagramEngine.getInstanceFactory(node._class).getInstance(node) as NodeModel;
 			nodeOb.deSerialize(node);
-			
 			//deserialize ports
 			_.forEach(node.ports,(port) => {
 				let portOb = diagramEngine.getInstanceFactory(port._class).getInstance() as PortModel;
@@ -93,7 +100,7 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 		});
 	}
 	
-	clearSelection(ignore: BaseModel|null = null){
+	clearSelection(ignore: BaseModel<BaseModelListener>|null = null){
 		_.forEach(this.getSelectedItems(),(element) => {
 			if (ignore && ignore.getID() === element.getID()){
 				return;
@@ -102,7 +109,7 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 		});
 	}
 	
-	getSelectedItems(): BaseModel[]{
+	getSelectedItems(): BaseModel<BaseModelListener>[]{
 		var items  = [];
 		
 		//find all nodes
@@ -125,29 +132,41 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 	
 	setZoomLevel(zoom:number){
 		this.zoom = zoom;
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.controlsUpdated) listener.controlsUpdated();
+		});
+		this.iterateListeners((listener) => {
+			listener.zoomUpdated && listener.zoomUpdated(this,this.zoom);
 		});
 	}
 	
 	setOffset(offsetX: number, offsetY: number){
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.controlsUpdated) listener.controlsUpdated();
+		});
+		this.iterateListeners((listener) => {
+			listener.offsetUpdated && listener.offsetUpdated(this,this.offsetX, this.offsetY)
 		});
 	}
 	
 	setOffsetX(offsetX: number){
 		this.offsetX = offsetX;
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.controlsUpdated) listener.controlsUpdated();
+		});
+		this.iterateListeners((listener) => {
+			listener.offsetUpdated && listener.offsetUpdated(this,this.offsetX, this.offsetY)
 		});
 	}
 	setOffsetY(offsetY: number){
 		this.offsetX = offsetY;
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.controlsUpdated) listener.controlsUpdated();
+		});
+		this.iterateListeners((listener) => {
+			listener.offsetUpdated && listener.offsetUpdated(this,this.offsetX, this.offsetY)
 		});
 	}
 	
@@ -190,7 +209,7 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 			}
 		});
 		this.links[link.getID()] = link;
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.linksUpdated) listener.linksUpdated(link, true);
 		});
 		return link
@@ -203,7 +222,7 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 			}
 		});
 		this.nodes[node.getID()] = node;
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.nodesUpdated) listener.nodesUpdated(node, true);
 		});
 		return node;
@@ -212,27 +231,27 @@ export class DiagramModel extends BaseEntity<DiagramListener>{
 	removeLink(link: LinkModel | string){
 		if (link instanceof LinkModel){
 			delete this.links[link.getID()];
-			this.itterateListeners((listener) => {
+			this.iterateListeners((listener) => {
 				if(listener.linksUpdated) listener.linksUpdated(link, false);
 			});
 			return;
 		}
 		delete this.links[''+link];
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.linksUpdated) listener.linksUpdated(link, false);
 		});
 	}
 	removeNode(node: NodeModel | string){
 		if (node instanceof NodeModel){
 			delete this.nodes[node.getID()];
-			this.itterateListeners((listener) => {
+			this.iterateListeners((listener) => {
 				if(listener.nodesUpdated) listener.nodesUpdated(node, false);
 			});
 			return;
 		}
 	
 		delete this.nodes[''+node];
-		this.itterateListeners((listener) => {
+		this.iterateListeners((listener) => {
 			if(listener.nodesUpdated) listener.nodesUpdated(node, false);
 		});
 	}

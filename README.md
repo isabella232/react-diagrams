@@ -3,7 +3,8 @@
 A super simple, no-nonsense diagramming library written in React that just works.
 
 [![Join the chat at https://gitter.im/projectstorm/react-diagrams](https://badges.gitter.im/projectstorm/react-diagrams.svg)](https://gitter.im/projectstorm/react-diagrams?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![NPM](https://nodei.co/npm/storm-react-diagrams.png?mini=true)](https://npmjs.org/package/storm-react-diagrams)
+[![NPM](https://img.shields.io/npm/v/storm-react-diagrams.svg)](https://npmjs.org/package/storm-react-diagrams)
+[![NPM](https://img.shields.io/npm/dt/storm-react-diagrams.svg)](https://npmjs.org/package/storm-react-diagrams)
 
 ![Demo2](./demo2.png)
 
@@ -59,38 +60,12 @@ a link can be connected to it.
 
 ## Events
 
-Each model (DiagramModel, NodeModel etc..) are all built ontop of an event system. You can listen for most of these events by registering
-an event on the model itself. See below for some common events (I will add better documentation soon)
+[Event System](docs/Events.md)
 
- - entityRemoved (entity)
- - selectionChanged (entity, isSelected:Boolean)
- - nodeFactoriesUpdated
- - linkFactoriesUpdated
- - controlsUpdated
- - linksUpdated (entity, isAdded:Boolean)
- - nodesUpdated (entity, isAdded:Boolean)
+## DiagramWidget props
 
- ### Example of usage
- ```javascript
-let model = new SRD.DiagramModel();
-let node1 = new SRD.DefaultNodeModel("default","rgb(0,192,255)");
-node1.addListener({
-      entityRemoved: (node) => {
-        console.log('Removed', node.id)
-      },
-      selectionChanged: (node, isSelected) => {
-        console.log(isSelected?'Selected':'Unselected', node)
-      }
-    });
-model.addListener({
-      linksUpdated:(entity, isAdded) => {
-        console.log(isAdded?'added':'removed', entity)
-      },
-      nodesUpdated: (entity, isAdded) => {
-        console.log(isAdded?'added':'removed', entity)
-      }
-    });
-```
+- onLinkStateChanged (link, isConnected)
+- diagramEngine
 
 
 ## Questions

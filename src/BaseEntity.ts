@@ -1,20 +1,21 @@
 import {Toolkit} from "./Toolkit";
-import {AbstractInstanceFactory} from "./AbstractInstanceFactory";
 /**
  * @author Dylan Vorster
  */
 export class BaseListener{
-	
+	lockChanged?(entity: BaseEntity<BaseListener>,locked: boolean): void;
 }
 
 export class BaseEntity<T extends BaseListener>{
 	
 	public listeners:{[s: string]: T};
 	public id: string;
+	public locked: boolean;
 	
-	constructor(){
+	constructor(id?:string){
 		this.listeners = {};
-		this.id = Toolkit.UID();
+		this.id = id || Toolkit.UID();
+		this.locked = false;
 	}
 	
 	getID(){
@@ -35,7 +36,8 @@ export class BaseEntity<T extends BaseListener>{
 		}
 	}
 	
-	public itterateListeners(cb: (t: T) => any){
+	public iterateListeners(cb: (t: T) => any){
+		
 		for (var i in this.listeners){
 			cb(this.listeners[i]);
 		}
@@ -53,5 +55,18 @@ export class BaseEntity<T extends BaseListener>{
 		var uid = Toolkit.UID();
 		this.listeners[uid] = listener;
 		return uid;
+	}
+	
+	public isLocked(): boolean{
+		return this.locked;
+	}
+	
+	public setLocked(locked: boolean = true){
+		this.locked = locked;
+		this.iterateListeners((listener) => {
+			if (listener.lockChanged){
+				listener.lockChanged(this, locked);
+			}
+		});
 	}
 }

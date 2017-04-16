@@ -11,10 +11,7 @@ module.exports = [
 			filename: 'main.js',
 			path: __dirname + '/dist',
 			libraryTarget: 'umd',
-			library: 'admithub-react-diagrams'
-		},
-		resolve: {
-			modules: [path.resolve(__dirname, "..", ".."), "node_modules"]
+			library: 'storm-react-diagrams'
 		},
 		externals: {
 			react: {
@@ -64,6 +61,6 @@ module.exports = [
 		resolve: {
 			extensions: [".tsx", ".ts", ".js"]
 		},
-//		devtool: 'source-map'
-	}
-];
+	},
+	//for building the demos and tests
+	];

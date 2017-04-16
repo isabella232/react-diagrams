@@ -3,9 +3,11 @@ import * as _ from "lodash";
 var div = React.DOM.div;
 import {DefaultNodeModel} from "./DefaultNodeModel";
 import {DefaultPortLabel} from "./DefaultPortLabelWidget";
+import {DiagramEngine} from "../DiagramEngine";
 
 export interface DefaultNodeProps {
 	node: DefaultNodeModel;
+	diagramEngine: DiagramEngine;
 }
 
 export interface DefaultNodeState {
@@ -15,10 +17,6 @@ export interface DefaultNodeState {
  * @author Dylan Vorster
  */
 export class DefaultNodeWidget extends React.Component<DefaultNodeProps, DefaultNodeState> {
-
-	public static defaultProps: DefaultNodeProps = {
-		node: null,
-	};
 
 	constructor(props: DefaultNodeProps) {
 		super(props);

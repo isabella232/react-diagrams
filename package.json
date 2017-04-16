@@ -1,6 +1,6 @@
 {
-  "name": "admithub-react-diagrams",
-  "version": "2.3.7",
+  "name": "storm-react-diagrams",
+  "version": "2.4.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/admithub/react-diagrams.git"
@@ -11,6 +11,9 @@
   "main": "./dist/main.js",
   "typings": "./dist/src/main",
   "author": "robawilkinson",
+  "scripts": {
+    "prepare": "webpack -p && ./node_modules/node-sass/bin/node-sass --output-style compressed ./src/sass.scss > ./dist/style.css"
+  },
   "dependencies": {
     "lodash": "^4.13.1",
     "react-dom": "^15.1.0",
