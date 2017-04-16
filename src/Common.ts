@@ -264,13 +264,8 @@ export class PortModel extends BaseModel<BaseModelListener>{
 		});
 	}
 	
-<<<<<<< HEAD
-	constructor(name: string, drag: boolean=true){
-		super();
-=======
-	constructor(name: string, id?:string){
+	constructor(name: string, id?:string, drag: boolean=true){
 		super(id);
->>>>>>> 232ec4fc48aab43a47e483c8cce9a215cab186cd
 		this.name = name;
 		this.links = {};
 		this.parentNode = null;

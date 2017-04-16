@@ -324,13 +324,6 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 						
 						//translate the actual canvas
 						else if (this.state.action instanceof MoveCanvasAction){
-<<<<<<< HEAD
-							diagramModel.setOffset(
-								this.state.action.initialOffsetX + ((event.pageX - this.state.action.mouseX -76) / (diagramModel.getZoomLevel()/100)),
-								this.state.action.initialOffsetY+((event.pageY-this.state.action.mouseY - 64)/(diagramModel.getZoomLevel()/100))
-							);
-							this.forceUpdate();
-=======
 							if (this.props.allowCanvasTranslation){
 								diagramModel.setOffset(
 									this.state.action.initialOffsetX + ((event.pageX - this.state.action.mouseX) / (diagramModel.getZoomLevel()/100)),
@@ -339,7 +332,6 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 								this.fireAction();
 								this.forceUpdate();
 							}
->>>>>>> 232ec4fc48aab43a47e483c8cce9a215cab186cd
 						}
 					},
 					onMouseDown: (event) =>{
@@ -365,7 +357,6 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 						
 						//its a port element, we want to drag a link
 						else if (model.model instanceof PortModel){
-<<<<<<< HEAD
 							if(model.model.drag){
 								var relative = diagramEngine.getRelativeMousePoint(event);
 								var link = new LinkModel();
@@ -394,20 +385,6 @@ export class DiagramWidget extends React.Component<DiagramProps, DiagramState> {
 									action: new MoveItemsAction(event.pageX, event.pageY,diagramEngine)
 								});
 							}
-=======
-							var relative = diagramEngine.getRelativeMousePoint(event);
-							var link = new LinkModel();
-							link.setSourcePort(model.model);
-							
-							link.getFirstPoint().updateLocation(relative)
-							link.getLastPoint().updateLocation(relative);
-							
-							diagramModel.clearSelection();
-							link.getLastPoint().setSelected(true);
-							diagramModel.addLink(link);
-							
-							this.startFiringAction(new MoveItemsAction(event.pageX, event.pageY, diagramEngine));
->>>>>>> 232ec4fc48aab43a47e483c8cce9a215cab186cd
 						}
 						//its some or other element, probably want to move it
 						else{

@@ -21,8 +21,8 @@ export class DefaultPortModel extends PortModel{
 	label: string;
 	drag: boolean;
 	
-	constructor(isInput:boolean,name: string,label: string = null, id?: string, drag: boolean = true){
-		super(name, id);
+	constructor(isInput:boolean,name: string,label: string = null, drag: boolean = true){
+		super(name);
 		this.in = isInput;
 		this.label = label || name;
 		this.drag = drag;
