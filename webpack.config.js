@@ -59,7 +59,11 @@ module.exports = [
 			]
 		},
 		resolve: {
-			extensions: [".tsx", ".ts", ".js"]
+			extensions: [".tsx", ".ts", ".js"],
+			alias: {
+				react: path.resolve(__dirname +'../../node_modules/react'),
+				'react-dom': path.resolve(__dirname + '../../node_modules/react-dom'),
+				},
 		},
 	},
 	//for building the demos and tests
